@@ -3,8 +3,9 @@ import platform
 
 from twisted.internet import defer
 
-from . import data
+from . import data, helper
 from p2pool.util import math, pack
+
 
 nets = dict(
     bitcoin=math.Object(
@@ -13,7 +14,7 @@ nets = dict(
         ADDRESS_VERSION=0,
         RPC_PORT=8332,
         RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
-            'bitcoinaddress' in (yield bitcoind.rpc_help()) and
+            (yield helper.check_genesis_block(bitcoind, '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f')) and
             not (yield bitcoind.rpc_getinfo())['testnet']
         )),
         SUBSIDY_FUNC=lambda height: 50*100000000 >> (height + 1)//210000,
@@ -54,7 +55,7 @@ nets = dict(
         P2P_PREFIX='f9beb4fe'.decode('hex'),
         P2P_PORT=8334,
         ADDRESS_VERSION=52,
-        RPC_PORT=8332,
+        RPC_PORT=8336,
         RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
             'namecoinaddress' in (yield bitcoind.rpc_help()) and
             not (yield bitcoind.rpc_getinfo())['testnet']
@@ -63,7 +64,7 @@ nets = dict(
         POW_FUNC=data.hash256,
         BLOCK_PERIOD=600, # s
         SYMBOL='NMC',
-        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Namecoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Namecoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.namecoin'), 'bitcoin.conf'),
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Namecoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Namecoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.namecoin'), 'namecoin.conf'),
         BLOCK_EXPLORER_URL_PREFIX='http://explorer.dot-bit.org/b/',
         ADDRESS_EXPLORER_URL_PREFIX='http://explorer.dot-bit.org/a/',
         TX_EXPLORER_URL_PREFIX='http://explorer.dot-bit.org/tx/',
@@ -75,7 +76,7 @@ nets = dict(
         P2P_PREFIX='fabfb5fe'.decode('hex'),
         P2P_PORT=18334,
         ADDRESS_VERSION=111,
-        RPC_PORT=8332,
+        RPC_PORT=18336,
         RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
             'namecoinaddress' in (yield bitcoind.rpc_help()) and
             (yield bitcoind.rpc_getinfo())['testnet']
@@ -84,7 +85,7 @@ nets = dict(
         POW_FUNC=data.hash256,
         BLOCK_PERIOD=600, # s
         SYMBOL='tNMC',
-        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Namecoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Namecoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.namecoin'), 'bitcoin.conf'),
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Namecoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Namecoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.namecoin'), 'namecoin.conf'),
         BLOCK_EXPLORER_URL_PREFIX='http://testnet.explorer.dot-bit.org/b/',
         ADDRESS_EXPLORER_URL_PREFIX='http://testnet.explorer.dot-bit.org/a/',
         TX_EXPLORER_URL_PREFIX='http://testnet.explorer.dot-bit.org/tx/',
