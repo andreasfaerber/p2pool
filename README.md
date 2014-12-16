@@ -1,3 +1,12 @@
+FEATHERCOIN P2POOL USERS:
+
+Please use https://github.com/wellenreiter01/p2pool-neoscrypt as a source for a
+feathercoin p2pool version. This repository has been merged with the above repository
+but will no longer be updated. If it will, it will only merge updates from the 
+p2pool-neoscrypt repository.
+
+
+
 Requirements:
 -------------------------
 Generic:
